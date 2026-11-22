@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Qubit in Order: Unlock the Quantum Computer</title>
+  <meta name="description" content="Qubit in Order: a browser game that teaches six quantum algorithms (Deutsch to Shor) through lessons, interactive demonstrations, quizzes and a circuit builder. Made for Qublitz 2026.">
+  <meta name="theme-color" content="#EE7F2D">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- The whole game is drawn inside #app by js/app.js -->
+  <div id="app">
+    <noscript><p>Qubit in Order needs JavaScript. Please enable it and reload.</p></noscript>
+  </div>
+
+  <!-- Screen readers hear feedback messages from here -->
+  <div id="announcer" class="sr-only" aria-live="polite"></div>
+
+  <!-- Order matters: data first, then logic, then the app -->
+  <script src="data/levels.js"></script>
+  <script src="data/questions.js"></script>
+  <script src="js/logic.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/motion.js"></script>
+  <script src="js/labs.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

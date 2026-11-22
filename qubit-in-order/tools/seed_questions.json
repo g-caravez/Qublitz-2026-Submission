@@ -1,0 +1,1008 @@
+{
+  "description": "60 original seed questions adapted from learning concepts in Scott Aaronson lecture notes. Original examples and distractors; manual academic review before publication is recommended.",
+  "totalQuestions": 60,
+  "questionsPerAlgorithm": 10,
+  "mvpRoundSize": 10,
+  "passScore": 8,
+  "longTermTargetPerAlgorithm": 150,
+  "longTermTotalTarget": 900,
+  "samplingNote": "With only 10 questions per algorithm, shuffle their order and four answer options. As content grows, sample 3 easy, 4 medium, 3 hard from each algorithm bank.",
+  "questions": {
+    "deutsch": [
+      {
+        "id": "deutsch-e01",
+        "algorithm": "deutsch",
+        "difficulty": "easy",
+        "type": "mcq",
+        "prompt": "A Boolean function is constant when...",
+        "options": [
+          "it returns the same output for inputs 0 and 1",
+          "it always returns 0",
+          "it returns different outputs for 0 and 1",
+          "it returns an output identical to its input"
+        ],
+        "correctIndex": 0,
+        "explanation": "Constant means f(0)=f(1); either both zero or both one.",
+        "source": "Lecture 17.3, printed pp. 138–139"
+      },
+      {
+        "id": "deutsch-e02",
+        "algorithm": "deutsch",
+        "difficulty": "easy",
+        "type": "visual_mcq",
+        "prompt": "What does a Hadamard gate do to an initial |0> qubit?",
+        "options": [
+          "Makes |1> with certainty",
+          "Creates (|0>+|1>)/sqrt(2)",
+          "Measures in the computational basis",
+          "it creates a 50/50 classical mixture rather than a coherent state"
+        ],
+        "correctIndex": 1,
+        "explanation": "H|0> = (|0>+|1>)/sqrt(2), a coherent equal superposition.",
+        "source": "Lecture 17.3, printed pp. 138–139",
+        "visual": {
+          "kind": "deutsch-hadamard-toggle",
+          "instruction": "Adjust the interactive visual before choosing an answer."
+        }
+      },
+      {
+        "id": "deutsch-e03",
+        "algorithm": "deutsch",
+        "difficulty": "easy",
+        "type": "mcq",
+        "prompt": "Under the ideal oracle-query model, Deutsch's algorithm needs how many queries?",
+        "options": [
+          "One quantum query",
+          "Two quantum queries",
+          "One query per possible function",
+          "Two queries carried out in parallel"
+        ],
+        "correctIndex": 0,
+        "explanation": "Deutsch uses one quantum oracle query to determine whether f(0) and f(1) match.",
+        "source": "Lecture 17.3, printed pp. 138–139"
+      },
+      {
+        "id": "deutsch-m01",
+        "algorithm": "deutsch",
+        "difficulty": "medium",
+        "type": "mcq",
+        "prompt": "If f(0)=0 and f(1)=1, what category is the function?",
+        "options": [
+          "Constant zero",
+          "Constant one",
+          "Balanced",
+          "Neither category"
+        ],
+        "correctIndex": 2,
+        "explanation": "Different outputs on the two inputs mean balanced in the one-bit case.",
+        "source": "Lecture 17.3, printed pp. 138–139"
+      },
+      {
+        "id": "deutsch-m02",
+        "algorithm": "deutsch",
+        "difficulty": "medium",
+        "type": "mcq",
+        "prompt": "If f(0)=1 and f(1)=1, how should an ideal Deutsch circuit classify f?",
+        "options": [
+          "Balanced, because both outputs are 1",
+          "Constant, because the outputs match",
+          "Balanced, because 1 is nonzero",
+          "Undetermined, because f(0) is not zero"
+        ],
+        "correctIndex": 1,
+        "explanation": "Equal output bits mean constant, regardless of whether the shared bit is 0 or 1.",
+        "source": "Lecture 17.3, printed pp. 138–139"
+      },
+      {
+        "id": "deutsch-m03",
+        "algorithm": "deutsch",
+        "difficulty": "medium",
+        "type": "mcq",
+        "prompt": "Why is a final Hadamard used after the phase oracle?",
+        "options": [
+          "To turn relative phase into a measurable basis outcome",
+          "To erase the phase information before measurement",
+          "To measure the ancilla before the input",
+          "To apply a global phase to every input equally"
+        ],
+        "correctIndex": 0,
+        "explanation": "The final H converts the relative phase pattern into a definitive |0> or |1> result.",
+        "source": "Lecture 17.3, printed pp. 138–139"
+      },
+      {
+        "id": "deutsch-m04",
+        "algorithm": "deutsch",
+        "difficulty": "medium",
+        "type": "mcq",
+        "prompt": "Starting at |0>, what is the final state after H followed by H?",
+        "options": [
+          "|+>",
+          "|->",
+          "|1>",
+          "|0>"
+        ],
+        "correctIndex": 3,
+        "explanation": "H is its own inverse, so H(H|0>)=|0>.",
+        "source": "Lecture 17.3, printed pp. 138–139"
+      },
+      {
+        "id": "deutsch-h01",
+        "algorithm": "deutsch",
+        "difficulty": "hard",
+        "type": "mcq",
+        "prompt": "A phase oracle acts on |+> with f(0)=0, f(1)=1. Ignoring global phase, what state results?",
+        "options": [
+          "|+>",
+          "|->",
+          "|0>",
+          "|1>"
+        ],
+        "correctIndex": 1,
+        "explanation": "The phase on |1> flips sign, giving (|0>-|1>)/sqrt(2) = |->.",
+        "source": "Lecture 17.3, printed pp. 138–139"
+      },
+      {
+        "id": "deutsch-h02",
+        "algorithm": "deutsch",
+        "difficulty": "hard",
+        "type": "mcq",
+        "prompt": "For the constant-one function, what does Deutsch's ideal final input measurement return?",
+        "options": [
+          "0 with certainty",
+          "1 with certainty",
+          "0 or 1 equally",
+          "It depends on whether the ancilla is measured first"
+        ],
+        "correctIndex": 0,
+        "explanation": "Both paths get a common minus sign (global phase); the final H still returns 0.",
+        "source": "Lecture 17.3, printed pp. 138–139"
+      },
+      {
+        "id": "deutsch-h03",
+        "algorithm": "deutsch",
+        "difficulty": "hard",
+        "type": "mcq",
+        "prompt": "If the final Hadamard is omitted after a phase oracle, what happens when the input qubit is measured in the computational basis?",
+        "options": [
+          "Constant functions always yield 0",
+          "Balanced functions always yield 1",
+          "Both categories give 50/50 input measurement probabilities",
+          "The result reveals both f(0) and f(1)"
+        ],
+        "correctIndex": 2,
+        "explanation": "Before the last H, the phase patterns have equal |0> and |1> probabilities, so direct measurement cannot distinguish them.",
+        "source": "Lecture 17.3, printed pp. 138–139"
+      }
+    ],
+    "deutsch_jozsa": [
+      {
+        "id": "deutsch_jozsa-e01",
+        "algorithm": "deutsch_jozsa",
+        "difficulty": "easy",
+        "type": "mcq",
+        "prompt": "What promise makes the Deutsch–Jozsa problem well-defined?",
+        "options": [
+          "The function is either constant or balanced",
+          "The function has exactly one input with output 1",
+          "The function has an equal number of even and odd inputs",
+          "The function is reversible on every input"
+        ],
+        "correctIndex": 0,
+        "explanation": "The problem promises the function is one of two types: constant or balanced.",
+        "source": "Lecture 17.4, printed pp. 139–141"
+      },
+      {
+        "id": "deutsch_jozsa-e02",
+        "algorithm": "deutsch_jozsa",
+        "difficulty": "easy",
+        "type": "mcq",
+        "prompt": "Which input-register result means \"constant\" in the ideal Deutsch–Jozsa algorithm?",
+        "options": [
+          "Any bit string containing a 1",
+          "The all-ones string",
+          "The all-zeros string",
+          "A uniformly random string"
+        ],
+        "correctIndex": 2,
+        "explanation": "The all-zero input-register measurement occurs with certainty for a constant promised function.",
+        "source": "Lecture 17.4, printed pp. 139–141"
+      },
+      {
+        "id": "deutsch_jozsa-e03",
+        "algorithm": "deutsch_jozsa",
+        "difficulty": "easy",
+        "type": "mcq",
+        "prompt": "Why apply Hadamard gates to all input qubits before the oracle?",
+        "options": [
+          "To measure the outputs early",
+          "To prepare a uniform superposition of inputs",
+          "To initialize the classical answer register",
+          "To make every oracle output equal"
+        ],
+        "correctIndex": 1,
+        "explanation": "H on each input qubit creates a uniform superposition over computational-basis inputs.",
+        "source": "Lecture 17.4, printed pp. 139–141"
+      },
+      {
+        "id": "deutsch_jozsa-m01",
+        "algorithm": "deutsch_jozsa",
+        "difficulty": "medium",
+        "type": "visual_mcq",
+        "prompt": "A two-bit function outputs [0,1,1,0] for inputs 00,01,10,11. How is it classified?",
+        "options": [
+          "Constant",
+          "Balanced",
+          "Neither constant nor balanced",
+          "Balanced only if the outputs appear in alternating order"
+        ],
+        "correctIndex": 1,
+        "explanation": "Two outputs are zero and two are one, so it is balanced.",
+        "source": "Lecture 17.4, printed pp. 139–141",
+        "visual": {
+          "kind": "dj-truth-table-toggle",
+          "instruction": "Adjust the interactive visual before choosing an answer."
+        }
+      },
+      {
+        "id": "deutsch_jozsa-m02",
+        "algorithm": "deutsch_jozsa",
+        "difficulty": "medium",
+        "type": "mcq",
+        "prompt": "For a promised two-input-bit function (4 possible inputs), how many deterministic classical queries may be necessary in the worst case?",
+        "options": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "correctIndex": 2,
+        "explanation": "With a constant-or-balanced promise, 2^(n-1)+1 = 3 queries suffice and can be necessary for n=2.",
+        "source": "Lecture 17.4, printed pp. 139–141"
+      },
+      {
+        "id": "deutsch_jozsa-m03",
+        "algorithm": "deutsch_jozsa",
+        "difficulty": "medium",
+        "type": "mcq",
+        "prompt": "If an ideal two-input-qubit Deutsch–Jozsa circuit measures 10, what does this imply?",
+        "options": [
+          "The function is constant",
+          "The function is balanced",
+          "The oracle has exactly one output equal to 1",
+          "The promise was violated"
+        ],
+        "correctIndex": 1,
+        "explanation": "Any nonzero input-register measurement means balanced, under the promise.",
+        "source": "Lecture 17.4, printed pp. 139–141"
+      },
+      {
+        "id": "deutsch_jozsa-m04",
+        "algorithm": "deutsch_jozsa",
+        "difficulty": "medium",
+        "type": "mcq",
+        "prompt": "For 3 input bits, how many of the 8 outputs are ones in a balanced Boolean function?",
+        "options": [
+          "2",
+          "3",
+          "4",
+          "6"
+        ],
+        "correctIndex": 2,
+        "explanation": "Balanced means exactly half zeros and half ones; half of 8 is 4.",
+        "source": "Lecture 17.4, printed pp. 139–141"
+      },
+      {
+        "id": "deutsch_jozsa-h01",
+        "algorithm": "deutsch_jozsa",
+        "difficulty": "hard",
+        "type": "mcq",
+        "prompt": "For 2 input bits, a truth table has outputs [1,1,1,0]. What is the correct conclusion?",
+        "options": [
+          "Constant",
+          "Balanced",
+          "It violates the constant-or-balanced promise",
+          "The function becomes balanced if the inputs are reordered"
+        ],
+        "correctIndex": 2,
+        "explanation": "Three ones and one zero is neither constant nor balanced; the theorem does not apply without the promise.",
+        "source": "Lecture 17.4, printed pp. 139–141"
+      },
+      {
+        "id": "deutsch_jozsa-h02",
+        "algorithm": "deutsch_jozsa",
+        "difficulty": "hard",
+        "type": "mcq",
+        "prompt": "For a balanced function, what is the ideal probability of measuring the input register as all zeros after the full Deutsch–Jozsa circuit?",
+        "options": [
+          "0",
+          "1/4",
+          "1/2",
+          "1"
+        ],
+        "correctIndex": 0,
+        "explanation": "The all-zero amplitude cancels by destructive interference for a balanced function.",
+        "source": "Lecture 17.4, printed pp. 139–141"
+      },
+      {
+        "id": "deutsch_jozsa-h03",
+        "algorithm": "deutsch_jozsa",
+        "difficulty": "hard",
+        "type": "mcq",
+        "prompt": "Why is it generally insufficient to apply the final Hadamard layer on only one of several input qubits?",
+        "options": [
+          "It discards the phase oracle entirely",
+          "It fails to perform the required basis transformation on the full input register",
+          "It always transforms the function into a constant one",
+          "It forces all measurements to be 1"
+        ],
+        "correctIndex": 1,
+        "explanation": "The algorithm relies on H across the entire input register after the oracle for its zero-versus-nonzero guarantee.",
+        "source": "Lecture 17.4, printed pp. 139–141"
+      }
+    ],
+    "bernstein_vazirani": [
+      {
+        "id": "bernstein_vazirani-e01",
+        "algorithm": "bernstein_vazirani",
+        "difficulty": "easy",
+        "type": "mcq",
+        "prompt": "What is the goal of Bernstein–Vazirani?",
+        "options": [
+          "Find a hidden binary string s",
+          "Determine whether a function is balanced",
+          "Find the period of modular exponentiation",
+          "Recover only the parity of the hidden string"
+        ],
+        "correctIndex": 0,
+        "explanation": "The promised oracle hides a bit string s, and the goal is to identify s.",
+        "source": "Lecture 18.1, printed pp. 142–144"
+      },
+      {
+        "id": "bernstein_vazirani-e02",
+        "algorithm": "bernstein_vazirani",
+        "difficulty": "easy",
+        "type": "mcq",
+        "prompt": "Which form describes the promised oracle?",
+        "options": [
+          "f(x) = s·x mod 2",
+          "f(x) = s XOR x (bitwise)",
+          "f(x) = s·x without reduction modulo 2",
+          "f(x) = parity(x) regardless of s"
+        ],
+        "correctIndex": 0,
+        "explanation": "Bernstein–Vazirani uses the mod-2 dot product of x with the secret s.",
+        "source": "Lecture 18.1, printed pp. 142–144"
+      },
+      {
+        "id": "bernstein_vazirani-e03",
+        "algorithm": "bernstein_vazirani",
+        "difficulty": "easy",
+        "type": "mcq",
+        "prompt": "How many ideal quantum oracle queries recover an n-bit secret string in Bernstein–Vazirani?",
+        "options": [
+          "One",
+          "Two",
+          "n/2",
+          "n"
+        ],
+        "correctIndex": 0,
+        "explanation": "The quantum algorithm extracts the full n-bit string using one phase query.",
+        "source": "Lecture 18.1, printed pp. 142–144"
+      },
+      {
+        "id": "bernstein_vazirani-m01",
+        "algorithm": "bernstein_vazirani",
+        "difficulty": "medium",
+        "type": "visual_mcq",
+        "prompt": "For secret s=101 and x=110, what is f(x)=s·x mod 2?",
+        "options": [
+          "0",
+          "1",
+          "2",
+          "3"
+        ],
+        "correctIndex": 1,
+        "explanation": "The bitwise products are 1,0,0; their sum is 1 modulo 2.",
+        "source": "Lecture 18.1, printed pp. 142–144",
+        "visual": {
+          "kind": "bv-parity-toggle",
+          "instruction": "Adjust the interactive visual before choosing an answer."
+        }
+      },
+      {
+        "id": "bernstein_vazirani-m02",
+        "algorithm": "bernstein_vazirani",
+        "difficulty": "medium",
+        "type": "mcq",
+        "prompt": "For s=010 and x=101, which calculation correctly explains f(x)=s·x mod 2?",
+        "options": [
+          "0: no positions have 1 in both strings",
+          "1: s has exactly one 1 bit",
+          "1: x has two 1 bits, so the parity is odd",
+          "0: the strings differ in their number of 1 bits"
+        ],
+        "correctIndex": 0,
+        "explanation": "The bitwise products are 0,0,0, so the dot product is 0 modulo 2. The result depends on overlapping 1 bits, not bit counts alone.",
+        "source": "Lecture 18.1, printed pp. 142–144"
+      },
+      {
+        "id": "bernstein_vazirani-m03",
+        "algorithm": "bernstein_vazirani",
+        "difficulty": "medium",
+        "type": "mcq",
+        "prompt": "In the ideal algorithm, what happens after applying the final Hadamards to the input register?",
+        "options": [
+          "It becomes |s>, so measurement reveals the secret",
+          "It becomes all zeros for any s",
+          "Only a parity bit is revealed",
+          "The oracle no longer influences any amplitude"
+        ],
+        "correctIndex": 0,
+        "explanation": "The phase pattern generated by the oracle is converted into the basis state encoding s.",
+        "source": "Lecture 18.1, printed pp. 142–144"
+      },
+      {
+        "id": "bernstein_vazirani-m04",
+        "algorithm": "bernstein_vazirani",
+        "difficulty": "medium",
+        "type": "mcq",
+        "prompt": "Why does querying x=001, x=010 and x=100 reveal a three-bit secret classically?",
+        "options": [
+          "Each query returns one specific bit of s",
+          "These queries have identical outputs",
+          "Each query returns all three bits of s",
+          "They show only the parity of the full secret"
+        ],
+        "correctIndex": 0,
+        "explanation": "Unit vectors isolate the corresponding bit in the mod-2 dot product.",
+        "source": "Lecture 18.1, printed pp. 142–144"
+      },
+      {
+        "id": "bernstein_vazirani-h01",
+        "algorithm": "bernstein_vazirani",
+        "difficulty": "hard",
+        "type": "mcq",
+        "prompt": "Suppose x=110 and s=110. What is f(x)=s·x mod 2?",
+        "options": [
+          "0",
+          "1",
+          "2",
+          "1, because the input has two set bits"
+        ],
+        "correctIndex": 0,
+        "explanation": "The overlapping ones contribute 1+1=2, which is 0 modulo 2.",
+        "source": "Lecture 18.1, printed pp. 142–144"
+      },
+      {
+        "id": "bernstein_vazirani-h02",
+        "algorithm": "bernstein_vazirani",
+        "difficulty": "hard",
+        "type": "mcq",
+        "prompt": "A three-bit Bernstein–Vazirani circuit returns 101 with certainty. What is the secret s?",
+        "options": [
+          "010",
+          "101",
+          "111",
+          "Only the parity of s is known"
+        ],
+        "correctIndex": 1,
+        "explanation": "For the promised oracle and correct circuit, the final measurement string equals the hidden string s.",
+        "source": "Lecture 18.1, printed pp. 142–144"
+      },
+      {
+        "id": "bernstein_vazirani-h03",
+        "algorithm": "bernstein_vazirani",
+        "difficulty": "hard",
+        "type": "mcq",
+        "prompt": "For s=111, what is the correct value of f(111)?",
+        "options": [
+          "0, because three ones cancel",
+          "1, because 1+1+1 is odd",
+          "0, because the number of matching bits is even",
+          "1, because the dot product always matches one bit of s"
+        ],
+        "correctIndex": 1,
+        "explanation": "The dot product is 3 mod 2 = 1.",
+        "source": "Lecture 18.1, printed pp. 142–144"
+      }
+    ],
+    "simon": [
+      {
+        "id": "simon-e01",
+        "algorithm": "simon",
+        "difficulty": "easy",
+        "type": "mcq",
+        "prompt": "In Simon's problem, what does the hidden mask s connect?",
+        "options": [
+          "Inputs x and x XOR s with equal outputs",
+          "All inputs with a single fixed output",
+          "Inputs that differ in precisely one bit",
+          "Inputs whose numerical difference equals s"
+        ],
+        "correctIndex": 0,
+        "explanation": "The function has paired inputs that differ by a hidden XOR mask and yield identical outputs.",
+        "source": "Lecture 18.2, printed pp. 144–149"
+      },
+      {
+        "id": "simon-e02",
+        "algorithm": "simon",
+        "difficulty": "easy",
+        "type": "mcq",
+        "prompt": "In Simon's algorithm, why do players usually collect several quantum samples?",
+        "options": [
+          "Each provides a linear constraint rather than the entire secret",
+          "Each sample is the next bit of s in order",
+          "Each sample reveals an entire second copy of the secret",
+          "Every measurement gives one output bit of the oracle"
+        ],
+        "correctIndex": 0,
+        "explanation": "Measurements yield equations y·s=0; enough independent constraints are needed to determine s.",
+        "source": "Lecture 18.2, printed pp. 144–149"
+      },
+      {
+        "id": "simon-e03",
+        "algorithm": "simon",
+        "difficulty": "easy",
+        "type": "mcq",
+        "prompt": "What does XOR mean for two binary bits?",
+        "options": [
+          "Addition modulo 2",
+          "Ordinary binary addition with carries",
+          "Bitwise OR",
+          "Bitwise AND"
+        ],
+        "correctIndex": 0,
+        "explanation": "XOR is 1 when bits differ and equals addition mod 2.",
+        "source": "Lecture 18.2, printed pp. 144–149"
+      },
+      {
+        "id": "simon-m01",
+        "algorithm": "simon",
+        "difficulty": "medium",
+        "type": "visual_mcq",
+        "prompt": "A Simon oracle gives f(001)=f(111). What mask is indicated by this collision?",
+        "options": [
+          "001",
+          "110",
+          "111",
+          "010"
+        ],
+        "correctIndex": 1,
+        "explanation": "XOR the paired inputs: 001 XOR 111 = 110.",
+        "source": "Lecture 18.2, printed pp. 144–149",
+        "visual": {
+          "kind": "simon-xor-pairs",
+          "instruction": "Adjust the interactive visual before choosing an answer."
+        }
+      },
+      {
+        "id": "simon-m02",
+        "algorithm": "simon",
+        "difficulty": "medium",
+        "type": "mcq",
+        "prompt": "For s=110 and y=001, does y·s=0 mod 2?",
+        "options": [
+          "Yes, because there are no overlapping 1 bits",
+          "Yes, because s is nonzero",
+          "No, because y has one 1 bit",
+          "No, because the strings have different lengths"
+        ],
+        "correctIndex": 0,
+        "explanation": "0·1 + 0·1 + 1·0 = 0 mod 2.",
+        "source": "Lecture 18.2, printed pp. 144–149"
+      },
+      {
+        "id": "simon-m03",
+        "algorithm": "simon",
+        "difficulty": "medium",
+        "type": "mcq",
+        "prompt": "If a measured sample is y=000, what information does y·s=0 impose?",
+        "options": [
+          "It forces s=000",
+          "It adds no restriction to s",
+          "It forces s to have one set bit",
+          "It requires s to have even parity"
+        ],
+        "correctIndex": 1,
+        "explanation": "The zero vector is orthogonal to every s, so this equation is uninformative.",
+        "source": "Lecture 18.2, printed pp. 144–149"
+      },
+      {
+        "id": "simon-m04",
+        "algorithm": "simon",
+        "difficulty": "medium",
+        "type": "mcq",
+        "prompt": "Which choice is an appropriate circuit pattern for Simon's algorithm?",
+        "options": [
+          "H on input → function oracle → H on input → measure input, repeated",
+          "H on output only → measure input once",
+          "Measure all inputs before the oracle → H",
+          "Inverse QFT → diffusion → measure"
+        ],
+        "correctIndex": 0,
+        "explanation": "Simon uses an input-register H layer, a two-register function oracle, a second input H layer, and repeated input measurement samples.",
+        "source": "Lecture 18.2, printed pp. 144–149"
+      },
+      {
+        "id": "simon-h01",
+        "algorithm": "simon",
+        "difficulty": "hard",
+        "type": "mcq",
+        "prompt": "Suppose s is a nonzero 3-bit mask, and samples give constraints s3=0 and s1 XOR s2=0. What is s?",
+        "options": [
+          "000",
+          "011",
+          "101",
+          "110"
+        ],
+        "correctIndex": 3,
+        "explanation": "The first constraint fixes the last bit at 0, and the second forces the first two equal; nonzero yields 110.",
+        "source": "Lecture 18.2, printed pp. 144–149"
+      },
+      {
+        "id": "simon-h02",
+        "algorithm": "simon",
+        "difficulty": "hard",
+        "type": "mcq",
+        "prompt": "Two independent measured constraints are y=011 and y=101, for a nonzero 3-bit mask s. Which mask satisfies both?",
+        "options": [
+          "001",
+          "101",
+          "111",
+          "110"
+        ],
+        "correctIndex": 2,
+        "explanation": "Equations s2 XOR s3=0 and s1 XOR s3=0 imply all three bits equal; nonzero gives 111.",
+        "source": "Lecture 18.2, printed pp. 144–149"
+      },
+      {
+        "id": "simon-h03",
+        "algorithm": "simon",
+        "difficulty": "hard",
+        "type": "mcq",
+        "prompt": "Why is it incorrect to say a single generic Simon measurement directly returns the secret mask?",
+        "options": [
+          "The measurement returns a y constrained by y·s=0, not necessarily s",
+          "The measurement yields one bit of s, not the mask",
+          "The measurement always returns the output f(x)",
+          "The measurement returns x XOR s directly"
+        ],
+        "correctIndex": 0,
+        "explanation": "Simon samples constrain s; solving the resulting system, typically across several runs, is the classical recovery step.",
+        "source": "Lecture 18.2, printed pp. 144–149"
+      }
+    ],
+    "grover": [
+      {
+        "id": "grover-e01",
+        "algorithm": "grover",
+        "difficulty": "easy",
+        "type": "mcq",
+        "prompt": "What is the job of Grover's marking oracle?",
+        "options": [
+          "Flip the phase of marked states",
+          "Measure the entire register",
+          "Set every amplitude equal to zero",
+          "Flip the phase of every unmarked state instead"
+        ],
+        "correctIndex": 0,
+        "explanation": "The marking oracle changes the relative sign of marked components so amplification can follow.",
+        "source": "Lecture 22, printed pp. 175–185"
+      },
+      {
+        "id": "grover-e02",
+        "algorithm": "grover",
+        "difficulty": "easy",
+        "type": "mcq",
+        "prompt": "What does the first Hadamard layer do in a standard Grover search?",
+        "options": [
+          "Prepare a uniform superposition of candidates",
+          "Read out the target index",
+          "Perform the diffusion automatically",
+          "Prepare an equal classical mixture after measuring"
+        ],
+        "correctIndex": 0,
+        "explanation": "Starting from all zeros, Hadamards put the register in a uniform superposition.",
+        "source": "Lecture 22, printed pp. 175–185"
+      },
+      {
+        "id": "grover-e03",
+        "algorithm": "grover",
+        "difficulty": "easy",
+        "type": "mcq",
+        "prompt": "What is the purpose of the diffusion operator?",
+        "options": [
+          "Reflect amplitudes about their mean to amplify marked outcomes",
+          "Mark the target by measuring it",
+          "Reverse the action of the marking oracle on every basis state",
+          "Increase every basis-state probability by the same amount"
+        ],
+        "correctIndex": 0,
+        "explanation": "Diffusion and the oracle together constitute amplitude amplification.",
+        "source": "Lecture 22, printed pp. 175–185"
+      },
+      {
+        "id": "grover-m01",
+        "algorithm": "grover",
+        "difficulty": "medium",
+        "type": "mcq",
+        "prompt": "For 8 equally likely candidate items with one marked target, what is the target probability before Grover iterations?",
+        "options": [
+          "1/2",
+          "1/4",
+          "1/8",
+          "1/16"
+        ],
+        "correctIndex": 2,
+        "explanation": "Uniform superposition over 8 possibilities gives each probability 1/8.",
+        "source": "Lecture 22, printed pp. 175–185"
+      },
+      {
+        "id": "grover-m02",
+        "algorithm": "grover",
+        "difficulty": "medium",
+        "type": "mcq",
+        "prompt": "In Grover search, which ordering constitutes one full amplification iteration?",
+        "options": [
+          "Diffusion then measure",
+          "Oracle then diffusion",
+          "Hadamard then measure",
+          "Measurement then oracle"
+        ],
+        "correctIndex": 1,
+        "explanation": "One Grover iteration is the marking phase oracle followed by diffusion.",
+        "source": "Lecture 22, printed pp. 175–185"
+      },
+      {
+        "id": "grover-m03",
+        "algorithm": "grover",
+        "difficulty": "medium",
+        "type": "mcq",
+        "prompt": "For a single marked item among four candidates, what is the ideal success probability after one Grover iteration?",
+        "options": [
+          "25%",
+          "50%",
+          "75%",
+          "100%"
+        ],
+        "correctIndex": 3,
+        "explanation": "For N=4, sin²(3·asin(1/2)) = sin²(pi/2) = 1.",
+        "source": "Lecture 22, printed pp. 175–185"
+      },
+      {
+        "id": "grover-m04",
+        "algorithm": "grover",
+        "difficulty": "medium",
+        "type": "visual_mcq",
+        "prompt": "Why might Grover be worse after too many iterations?",
+        "options": [
+          "The probability rotates past its maximum and falls",
+          "The diffusion ceases to preserve normalization",
+          "The initial uniform state disappears before the oracle",
+          "The amplitude amplification has no optimal stopping point"
+        ],
+        "correctIndex": 0,
+        "explanation": "Amplitude amplification oscillates; additional iterations can overshoot the optimum.",
+        "source": "Lecture 22, printed pp. 175–185",
+        "visual": {
+          "kind": "grover-iterations-slider",
+          "instruction": "Adjust the interactive visual before choosing an answer."
+        }
+      },
+      {
+        "id": "grover-h01",
+        "algorithm": "grover",
+        "difficulty": "hard",
+        "type": "mcq",
+        "prompt": "For one marked item among N possibilities, the ideal number of Grover oracle queries scales roughly like...",
+        "options": [
+          "N",
+          "log2 N",
+          "sqrt(N)",
+          "N²"
+        ],
+        "correctIndex": 2,
+        "explanation": "Grover gives a quadratic query advantage: O(sqrt(N)) rather than O(N).",
+        "source": "Lecture 22, printed pp. 175–185"
+      },
+      {
+        "id": "grover-h02",
+        "algorithm": "grover",
+        "difficulty": "hard",
+        "type": "mcq",
+        "prompt": "For N=16 and one marked item, which statement about three Grover iterations is most accurate?",
+        "options": [
+          "They make success very likely but not exactly guaranteed",
+          "They leave the target at its original 1/16 probability",
+          "They always make success exactly zero",
+          "They produce a guaranteed correct result without sampling"
+        ],
+        "correctIndex": 0,
+        "explanation": "The ideal target probability after three iterations is sin²(7 asin(1/4)), about 96%.",
+        "source": "Lecture 22, printed pp. 175–185"
+      },
+      {
+        "id": "grover-h03",
+        "algorithm": "grover",
+        "difficulty": "hard",
+        "type": "mcq",
+        "prompt": "If there are multiple marked items, what needs to change in choosing Grover iteration count?",
+        "options": [
+          "The number of marked items affects the optimal count",
+          "Nothing; always use exactly N rounds",
+          "The Hadamard gates must all be removed",
+          "The algorithm becomes deterministic after zero rounds"
+        ],
+        "correctIndex": 0,
+        "explanation": "The initial overlap with the marked subspace depends on the number of solutions, so the optimal number of iterations changes.",
+        "source": "Lecture 22, printed pp. 175–185"
+      }
+    ],
+    "shor": [
+      {
+        "id": "shor-e01",
+        "algorithm": "shor",
+        "difficulty": "easy",
+        "type": "mcq",
+        "prompt": "What problem is the period-finding subroutine used for in Shor's algorithm?",
+        "options": [
+          "Finding factors of an integer",
+          "Finding a marked database item",
+          "Classifying one-bit functions",
+          "Determining whether XOR outputs collide"
+        ],
+        "correctIndex": 0,
+        "explanation": "Shor reduces factoring to a period-finding problem plus classical number theory.",
+        "source": "Lectures 19–21, printed pp. 151–172; Figure 20.1 p. 161"
+      },
+      {
+        "id": "shor-e02",
+        "algorithm": "shor",
+        "difficulty": "easy",
+        "type": "mcq",
+        "prompt": "What does the quantum Fourier transform help reveal?",
+        "options": [
+          "Periodic structure encoded in amplitudes",
+          "A complete table of modular exponentiation outputs at once",
+          "The exact prime factors directly from each single measurement",
+          "Only the largest amplitude without any phase information"
+        ],
+        "correctIndex": 0,
+        "explanation": "The QFT uses phase interference to provide information about frequencies and periods.",
+        "source": "Lectures 19–21, printed pp. 151–172; Figure 20.1 p. 161"
+      },
+      {
+        "id": "shor-e03",
+        "algorithm": "shor",
+        "difficulty": "easy",
+        "type": "mcq",
+        "prompt": "Which classical operation helps recover factors from a suitable period?",
+        "options": [
+          "Greatest common divisor (GCD)",
+          "A continued-fractions approximation by itself, with no GCD step",
+          "A bitwise XOR of the measured register",
+          "Repeated squaring by itself, without a period"
+        ],
+        "correctIndex": 0,
+        "explanation": "Classical GCD computations using an even period can yield nontrivial factors.",
+        "source": "Lectures 19–21, printed pp. 151–172; Figure 20.1 p. 161"
+      },
+      {
+        "id": "shor-m01",
+        "algorithm": "shor",
+        "difficulty": "medium",
+        "type": "mcq",
+        "prompt": "For f(x)=2^x mod 15, the sequence begins 1,2,4,8,1,... What is the period?",
+        "options": [
+          "2",
+          "3",
+          "4",
+          "5"
+        ],
+        "correctIndex": 2,
+        "explanation": "The first 1 reappears after four exponent steps: 2^4 ≡ 1 mod 15.",
+        "source": "Lectures 19–21, printed pp. 151–172; Figure 20.1 p. 161"
+      },
+      {
+        "id": "shor-m02",
+        "algorithm": "shor",
+        "difficulty": "medium",
+        "type": "mcq",
+        "prompt": "For N=15, a=2 and period r=4, what is gcd(2^(r/2)-1,15)?",
+        "options": [
+          "1",
+          "2",
+          "3",
+          "5"
+        ],
+        "correctIndex": 2,
+        "explanation": "2^(4/2)-1=3, and gcd(3,15)=3.",
+        "source": "Lectures 19–21, printed pp. 151–172; Figure 20.1 p. 161"
+      },
+      {
+        "id": "shor-m03",
+        "algorithm": "shor",
+        "difficulty": "medium",
+        "type": "mcq",
+        "prompt": "What is the relationship between the QFT result and the final factors in Shor's method?",
+        "options": [
+          "The QFT supplies information for estimating a period, then classical processing obtains factors",
+          "The QFT directly outputs both primes in every single shot",
+          "The QFT removes the need for a modular exponentiation function",
+          "The QFT is identical to Grover's diffusion operator"
+        ],
+        "correctIndex": 0,
+        "explanation": "Period reconstruction and GCD postprocessing are needed; the output is not simply the factor pair.",
+        "source": "Lectures 19–21, printed pp. 151–172; Figure 20.1 p. 161"
+      },
+      {
+        "id": "shor-m04",
+        "algorithm": "shor",
+        "difficulty": "medium",
+        "type": "visual_mcq",
+        "prompt": "What does the clock-arrow analogy illustrate for the QFT?",
+        "options": [
+          "Correctly matched frequencies can reinforce while others cancel",
+          "All arrows always point in the same direction",
+          "Every period corresponds to the same frequency",
+          "Any randomly chosen clock frequency always reveals the same period"
+        ],
+        "correctIndex": 0,
+        "explanation": "Aligning phase directions add constructively; misaligned ones can cancel.",
+        "source": "Lectures 19–21, printed pp. 151–172; Figure 20.1 p. 161",
+        "visual": {
+          "kind": "shor-period-clocks",
+          "instruction": "Adjust the interactive visual before choosing an answer."
+        }
+      },
+      {
+        "id": "shor-h01",
+        "algorithm": "shor",
+        "difficulty": "hard",
+        "type": "mcq",
+        "prompt": "For N=15, a=2 and period r=4, what is gcd(2^(r/2)+1,15)?",
+        "options": [
+          "1",
+          "2",
+          "3",
+          "5"
+        ],
+        "correctIndex": 3,
+        "explanation": "2²+1=5, and gcd(5,15)=5, giving the other nontrivial factor.",
+        "source": "Lectures 19–21, printed pp. 151–172; Figure 20.1 p. 161"
+      },
+      {
+        "id": "shor-h02",
+        "algorithm": "shor",
+        "difficulty": "hard",
+        "type": "mcq",
+        "prompt": "Why does an odd order r not immediately yield the standard factor formula using a^(r/2)±1?",
+        "options": [
+          "r/2 is not an integer, so the even-period factorization step is unavailable",
+          "Because a^r cannot be computed",
+          "Because an even r would force all Fourier peaks to vanish",
+          "Because odd r always means N has no nontrivial factors"
+        ],
+        "correctIndex": 0,
+        "explanation": "The standard reduction needs an even r, plus a nontriviality condition; an unsuccessful choice can be retried.",
+        "source": "Lectures 19–21, printed pp. 151–172; Figure 20.1 p. 161"
+      },
+      {
+        "id": "shor-h03",
+        "algorithm": "shor",
+        "difficulty": "hard",
+        "type": "mcq",
+        "prompt": "In a teaching implementation that uses an \"inverse QFT\" block, what is the scientifically accurate claim?",
+        "options": [
+          "The block represents a real algorithmic step, but the game need not implement its internal gate decomposition",
+          "The block proves the website runs a full quantum computer",
+          "The block is interchangeable with a Grover diffusion block",
+          "The block guarantees a factor after every measurement"
+        ],
+        "correctIndex": 0,
+        "explanation": "A prebuilt inverse-QFT block is an instructional abstraction; it should not be presented as a full simulator.",
+        "source": "Lectures 19–21, printed pp. 151–172; Figure 20.1 p. 161"
+      }
+    ]
+  }
+}

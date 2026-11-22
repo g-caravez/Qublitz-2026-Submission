@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Qubit in Order: self-tests</title>
+  <style>
+    body { font: 15px/1.5 system-ui, sans-serif; max-width: 920px; margin: 30px auto; padding: 0 16px; background: #0C0C0E; color: #EEE; }
+    h1 { margin-bottom: .2em; }
+    li { margin: 3px 0; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; }
+    .pass { color: #4ADE80; }
+    .fail { color: #F87171; font-weight: 700; }
+    #summary { font-size: 1.2rem; font-weight: 700; padding: 10px 14px; border-radius: 10px; background: #151518; border: 1px solid #2E2E35; }
+  </style>
+</head>
+<body>
+  <h1>Qubit in Order self-tests</h1>
+  <p>Open this page after editing questions or levels. Every line should be green.</p>
+  <p id="summary">Running...</p>
+  <ul id="results"></ul>
+
+  <script src="data/levels.js"></script>
+  <script src="data/questions.js"></script>
+  <script src="js/logic.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/motion.js"></script>
+  <script src="js/labs.js"></script>
+  <script>
+  (function () {
+    "use strict";
+    const L = window.QQLogic, LEVELS = window.QQ_LEVELS, Q = window.QQ_QUESTIONS, LABS = window.QQLabs, VIS = window.QQ_VISUAL_TO_LAB;
+    const out = document.getElementById("results");
+    let passed = 0, failed = 0;
+    function test(name, fn) {
+      let ok = false, detail = "";
+      try { const r = fn(); ok = r === undefined || r === true || typeof r === "string"; if (typeof r === "string") detail = r; }
+      catch (e) { detail = e.message; }
+      if (ok) passed++; else failed++;
+      const li = document.createElement("li");
+      li.className = ok ? "pass" : "fail";
+      li.textContent = (ok ? "PASS  " : "FAIL  ") + name + (detail ? "  (" + detail + ")" : "");
+      out.appendChild(li);
+    }
+    function assert(c, msg) { if (!c) throw new Error(msg || "assertion failed"); }
+    function seeded(seed) { return function () { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }; }
+    const near = function (a, b) { return Math.abs(a - b) < 1e-9; };
+
+    /* ---------- Question bank ---------- */
+    const allIds = new Set();
+    LEVELS.forEach(function (lv) {
+      const bank = Q[lv.id] || [];
+      test("Bank " + lv.id + ": every question well formed (4 unique options, valid answer, explanation, source)", function () {
+        bank.forEach(function (q) {
+          ["id", "algorithm", "difficulty", "type", "prompt", "explanation", "source"].forEach(function (k) { assert(typeof q[k] === "string" && q[k].trim(), q.id + " missing " + k); });
+          assert(q.algorithm === lv.id, q.id + " algorithm");
+          assert(q.options.length === 4 && new Set(q.options).size === 4, q.id + " options");
+          assert(Number.isInteger(q.correctIndex) && q.correctIndex >= 0 && q.correctIndex < 4, q.id + " correctIndex");
+          assert(!allIds.has(q.id), "duplicate id " + q.id); allIds.add(q.id);
+          if (q.visual) assert(VIS[q.visual.kind], q.id + " visual kind has no lab");
+        });
+      });
+      test("Bank " + lv.id + ": at least 20 easy, 20 medium, 20 hard, with 2+ visual questions in each", function () {
+        ["easy", "medium", "hard"].forEach(function (d) {
+          const pool = bank.filter(function (q) { return q.difficulty === d; });
+          assert(pool.length >= 20, d + " has " + pool.length);
+          assert(pool.filter(function (q) { return q.visual; }).length >= 2, d + " needs at least 2 visual questions");
+        });
+        return bank.length + " questions";
+      });
+    });
+
+    /* ---------- Quiz drawing ---------- */
+    test("drawQuiz: 3000 attempts give 10 unique questions of the chosen difficulty, answers preserved, one visual included", function () {
+      const rng = seeded(42), pos = [0, 0, 0, 0];
+      for (let t = 0; t < 3000; t++) {
+        const lv = LEVELS[t % 6], diff = ["easy", "medium", "hard"][t % 3];
+        const byId = {}; Q[lv.id].forEach(function (q) { byId[q.id] = q; });
+        const qs = L.drawQuiz(Q[lv.id], diff, 10, rng);
+        assert(qs.length === 10 && new Set(qs.map(function (q) { return q.id; })).size === 10, "size/unique");
+        assert(qs.some(function (q) { return q.visual; }), "no visual");
+        qs.forEach(function (q) {
+          assert(q.difficulty === diff, "wrong difficulty");
+          const o = byId[q.id];
+          assert(q.options[q.correctIndex] === o.options[o.correctIndex], "answer moved wrongly in " + q.id);
+          pos[q.correctIndex]++;
+        });
+      }
+      const total = pos.reduce(function (a, b) { return a + b; }, 0);
+      pos.forEach(function (n, i) { assert(n / total > 0.22 && n / total < 0.28, "position " + "ABCD"[i] + " " + (100 * n / total).toFixed(1) + "%"); });
+      return "correct at A/B/C/D: " + pos.map(function (n) { return (100 * n / total).toFixed(1) + "%"; }).join(" / ");
+    });
+    test("drawQuiz: too few questions of a difficulty gives a clear error", function () {
+      let msg = ""; try { L.drawQuiz(Q.deutsch.slice(0, 5), "hard", 10); } catch (e) { msg = e.message; }
+      assert(/needs 10/.test(msg), msg);
+    });
+    test("drawQuiz: with a larger bank, a retry avoids last attempt's questions", function () {
+      const big = []; for (let i = 0; i < 25; i++) big.push({ id: "q" + i, difficulty: "hard", options: ["a", "b", "c", "d"], correctIndex: 0, prompt: "p", explanation: "e" });
+      const a = L.drawQuiz(big, "hard", 10, seeded(1)).map(function (q) { return q.id; });
+      const b = L.drawQuiz(big, "hard", 10, seeded(2), a).map(function (q) { return q.id; });
+      assert(b.every(function (id) { return a.indexOf(id) < 0; }), "overlap");
+    });
+
+    test("Retry setting ON: 1800 fail-and-retry pairs on the real bank never repeat a question, and both tries have a visual", function () {
+      const rng = seeded(7);
+      for (let t = 0; t < 1800; t++) {
+        const lv = LEVELS[t % 6], diff = ["easy", "medium", "hard"][t % 3];
+        const a = L.drawQuiz(Q[lv.id], diff, 10, rng);
+        const ids = a.map(function (q) { return q.id; });
+        const b = L.drawQuiz(Q[lv.id], diff, 10, rng, ids);
+        assert(b.length === 10 && b.every(function (q) { return ids.indexOf(q.id) < 0; }), "repeat in " + lv.id + " " + diff);
+        assert(a.some(function (q) { return q.visual; }) && b.some(function (q) { return q.visual; }), "missing visual in " + lv.id + " " + diff);
+      }
+    });
+    test("Retry setting OFF: redrawQuiz keeps the same 10 questions, reorders them, and keeps answers right", function () {
+      const rng = seeded(11);
+      let reordered = 0;
+      for (let t = 0; t < 600; t++) {
+        const lv = LEVELS[t % 6], diff = ["easy", "medium", "hard"][t % 3];
+        const byId = {}; Q[lv.id].forEach(function (q) { byId[q.id] = q; });
+        const ids = L.drawQuiz(Q[lv.id], diff, 10, rng).map(function (q) { return q.id; });
+        const b = L.redrawQuiz(Q[lv.id], ids, rng);
+        const bIds = b.map(function (q) { return q.id; });
+        assert(bIds.length === 10 && bIds.slice().sort().join() === ids.slice().sort().join(), "different questions");
+        b.forEach(function (q) { const o = byId[q.id]; assert(q.options[q.correctIndex] === o.options[o.correctIndex], "answer moved wrongly"); });
+        if (bIds.join() !== ids.join()) reordered++;
+      }
+      assert(reordered > 590, "only " + reordered + " of 600 reordered");
+    });
+
+    /* ---------- Pass mark and points ---------- */
+    [[0, false], [7, false], [8, true], [9, true], [10, true]].forEach(function (c) {
+      test("Pass mark: " + c[0] + "/10 " + (c[1] ? "passes" : "does not pass"), function () {
+        const qs = L.drawQuiz(Q.grover, "medium", 10, seeded(c[0] + 3));
+        const ans = qs.map(function (q, i) { return i < c[0] ? q.correctIndex : (q.correctIndex + 1) % 4; });
+        const r = L.gradeQuiz(qs, ans, 8);
+        assert(r.score === c[0] && r.passed === c[1] && r.missed.length === 10 - c[0]);
+      });
+    });
+    test("Points: +1 easy, +2 medium, +3 hard per correct answer", function () {
+      assert(L.quizPoints(8, "easy") === 8 && L.quizPoints(8, "medium") === 16 && L.quizPoints(8, "hard") === 24 && L.quizPoints(10, "hard") === 30);
+    });
+    test("Leaderboard: sorted by points, ties by modules, top 5 only", function () {
+      const players = {};
+      [["Ann", 30, 1], ["Ben", 50, 0], ["Cy", 30, 2], ["Di", 10, 0], ["Ed", 5, 0], ["Flo", 1, 0]].forEach(function (p, i) {
+        const levels = { deutsch: { bestPoints: p[1], completed: p[2] > 0 } };
+        if (p[2] > 1) levels.grover = { bestPoints: 0, completed: true };
+        players["id" + i] = { name: p[0], levels: levels };
+      });
+      const top = L.leaderboard(players, 5);
+      assert(top.length === 5, "length");
+      assert(top.map(function (e) { return e.name; }).join(",") === "Ben,Cy,Ann,Di,Ed", top.map(function (e) { return e.name; }).join(","));
+    });
+
+    /* ---------- Simulator ---------- */
+    test("Hadamard then CNOT makes a Bell state (00 and 11, 50% each)", function () {
+      const st = L.newState(2, 0); L.applyGate(st, "H", 0); L.applyGate(st, "X", 1, [0]);
+      const p = L.probabilities(st, [0, 1]); assert(near(p[0], .5) && near(p[3], .5) && p[1] === 0 && p[2] === 0, String(p));
+    });
+    test("Two Phase (S) gates make a Pauli-Z: H, S, S, H takes |0⟩ to |1⟩", function () {
+      const st = L.newState(1, 0); ["H", "S", "S", "H"].forEach(function (g) { L.applyGate(st, g, 0); });
+      assert(L.probabilities(st, [0])[1] === 1);
+    });
+    test("Pauli-Y on |0⟩ gives i|1⟩", function () {
+      const st = L.newState(1, 0); L.applyGate(st, "Y", 0); assert(st.re[1] === 0 && st.im[1] === 1 && st.re[0] === 0);
+    });
+    test("Controlled-Z is symmetric: control on either qubit gives the same state", function () {
+      const a = L.newState(2, 0), b = L.newState(2, 0);
+      [a, b].forEach(function (s) { L.applyGate(s, "H", 0); L.applyGate(s, "H", 1); });
+      L.applyGate(a, "Z", 1, [0]); L.applyGate(b, "Z", 0, [1]);
+      for (let i = 0; i < 4; i++) assert(near(a.re[i], b.re[i]));
+    });
+    test("QFT followed by inverse QFT is the identity", function () {
+      const st = L.newState(3, 5); L.applyQFT(st, [0, 1, 2], 1); L.applyQFT(st, [0, 1, 2], -1);
+      assert(near(L.probabilities(st, [0, 1, 2])[5], 1));
+    });
+    test("Clock lab probabilities add up to 1 for every period", function () {
+      [2, 3, 4, 8].forEach(function (r) { let t = 0; for (let y = 0; y < 16; y++) t += L.clockProbability(16, r, y, 1); assert(near(t, 1), "r=" + r + " total " + t); });
+    });
+    test("Grover formula: 78.1%, 94.5%, 33.0% after 1, 2, 3 iterations (N = 8)", function () {
+      assert(Math.abs(L.groverSuccess(8, 1) - 0.78125) < 1e-9 && Math.abs(L.groverSuccess(8, 2) - 0.9453) < 1e-4 && Math.abs(L.groverSuccess(8, 3) - 0.3301) < 1e-4);
+    });
+
+    /* ---------- Every level's circuit checker ---------- */
+    function circ(lv, spec) {
+      const c = L.emptyCircuit(lv.build);
+      spec.forEach(function (col, i) { if (typeof col === "string") c.macros[i] = col; else col.forEach(function (g, r) { c.cells[i][r] = g; }); });
+      return c;
+    }
+    const H = function (n) { return new Array(n).fill("H"); };
+    const byId = {}; LEVELS.forEach(function (lv) { byId[lv.id] = lv; });
+    const cases = [
+      ["deutsch", [["H"], "U", ["H"]], true, "textbook circuit"],
+      ["deutsch", [["X"], ["H"], "U", ["H"], ["X"]], true, "valid variant with two extra X"],
+      ["deutsch", [["H"], "U"], false, "missing final Hadamard"],
+      ["deutsch", [["H"], "U", ["H"], ["X"]], false, "labels swapped"],
+      ["deutsch", [["H"], "U", "U", ["H"]], false, "two queries"],
+      ["deutsch", [["H"], ["H"], ["H"]], false, "no oracle"],
+      ["deutsch_jozsa", [H(2), "U", H(2)], true, "textbook circuit"],
+      ["deutsch_jozsa", [H(2), "U", ["H", null]], false, "one Hadamard missing"],
+      ["deutsch_jozsa", ["U", H(2)], false, "no superposition"],
+      ["bernstein_vazirani", [H(3), "U", H(3)], true, "textbook circuit"],
+      ["bernstein_vazirani", [H(3), "U", ["H", "H", null]], false, "one Hadamard missing"],
+      ["simon", [H(3), "O", H(3)], true, "textbook circuit"],
+      ["simon", [H(3), "O"], false, "no final Hadamards"],
+      ["simon", ["O", H(3)], false, "no first Hadamards"],
+      ["grover", [H(3), "M", "D", "M", "D"], true, "2 iterations"],
+      ["grover", [H(3), "M", "D"], false, "1 iteration (78%)"],
+      ["grover", [H(3), "M", "D", "M", "D", "M", "D"], false, "3 iterations overshoot"],
+      ["grover", ["M", "D", "M", "D"], false, "no superposition"],
+      ["shor", [H(4), "E", "I"], true, "inverse QFT"],
+      ["shor", [H(4), "E", "F"], true, "QFT (same probabilities)"],
+      ["shor", [H(4), "E"], false, "no Fourier transform"],
+      ["shor", ["E", "I"], false, "no superposition"]
+    ];
+    cases.forEach(function (c) {
+      test("Checker " + c[0] + ": " + c[3] + " → " + (c[2] ? "passes" : "fails with a reason"), function () {
+        const r = L.checkCircuit(c[0], byId[c[0]].build, circ(byId[c[0]], c[1]));
+        assert(r.ok === c[2], r.ok ? r.verdict : r.message);
+        if (!r.ok) assert(r.message && r.message.length > 20, "no explanation");
+        return r.ok ? "" : r.message.slice(0, 70) + "...";
+      });
+    });
+    test("Simon solver: equations from y = 001 and y = 110 leave only s = 110", function () {
+      const c = L.simonCandidates([1, 6], 3); assert(c.length === 1 && c[0] === 6, String(c));
+    });
+    test("Shor arithmetic: 2^4 mod 15 = 1, gcd(3, 15) = 3, gcd(5, 15) = 5", function () {
+      assert(L.powMod(2, 4, 15) === 1 && L.powMod(2, 2, 15) === 4 && L.gcd(3, 15) === 3 && L.gcd(5, 15) === 5);
+    });
+
+    /* ---------- Level data and labs ---------- */
+    LEVELS.forEach(function (lv) {
+      test("Level " + lv.id + ": lessons, lab, challenges, goals, 3 hints and macros are defined", function () {
+        assert(lv.lessonCards.length >= 4, "lessons");
+        assert(LABS[lv.lab.kind], "lab " + lv.lab.kind);
+        lv.challenges.forEach(function (ch) { assert(LABS[lv.lab.kind].checks[ch.check], "check " + ch.check); });
+        assert(lv.build.hints.length === 3 && lv.build.goals.length >= 3, "hints/goals");
+        lv.build.gates.forEach(function (g) { assert(window.QQ_GATES[g], "gate " + g); });
+        const editable = lv.build.rows.filter(function (r) { return r.editable; }).length;
+        assert(editable > 1 || lv.build.gates.indexOf("C") < 0, "control offered on a 1-qubit circuit");
+        const html = LABS[lv.lab.kind].render("t", LABS[lv.lab.kind].init(), false);
+        assert(html.indexOf("data-lab-root") > 0, "lab render");
+      });
+    });
+    test("Level 1 offers only single-qubit gates (no Control)", function () { assert(LEVELS[0].build.gates.indexOf("C") < 0); });
+    function labWith(kind, setup) { const lab = LABS[kind].init(); setup(lab); return lab; }
+    const labCases = [
+      ["qubit-lab", "fifty-fifty", function (l) { l.stages = [true, false, false]; }],
+      ["qubit-lab", "balanced-gives-one", function (l) { l.stages = [true, true, true]; l.fid = "D"; }],
+      ["qubit-lab", "sneaky-constant", function (l) { l.stages = [true, true, true]; l.fid = "B"; }],
+      ["tt-lab", "tt-balanced", function (l) { l.f = [1, 0, 1, 0]; }],
+      ["tt-lab", "tt-constant-one", function (l) { l.f = [1, 1, 1, 1]; }],
+      ["tt-lab", "tt-break-promise", function (l) { l.f = [1, 1, 1, 0]; }],
+      ["bv-lab", "bv-even-overlap", function (l) { l.s = [1, 0, 1]; l.x = [1, 1, 1]; }],
+      ["bv-lab", "bv-half-minus", function (l) { l.s = [0, 1, 1]; }],
+      ["bv-lab", "bv-mystery", function (l) { l.secret = 6; l.queries = [{ x: 4, f: 1 }, { x: 2, f: 1 }, { x: 1, f: 0 }]; l.guess = [1, 1, 0]; }],
+      ["simon-lab", "simon-find-pair", function (l) { l.s = [1, 1, 0]; l.sel = [1, 7]; }],
+      ["simon-lab", "simon-pair-100", function (l) { l.s = [0, 1, 1]; l.sel = [4, 7]; }],
+      ["simon-lab", "simon-orthogonal", function (l) { l.s = [1, 1, 0]; l.y = [0, 0, 1]; }],
+      ["grover-lab", "grover-90", function (l) { l.ops = ["O", "D", "O", "D"]; }],
+      ["grover-lab", "grover-overshoot", function (l) { l.ops = ["O", "D", "O", "D", "O", "D"]; }],
+      ["grover-lab", "grover-oracle-only", function (l) { l.ops = ["O"]; }],
+      ["clock-lab", "clock-align", function (l) { l.r = 4; l.y = 8; }],
+      ["clock-lab", "clock-cancel", function (l) { l.r = 4; l.y = 3; }],
+      ["clock-lab", "clock-period8", function (l) { l.r = 8; l.y = 6; }]
+    ];
+    labCases.forEach(function (c) {
+      test("Lab challenge " + c[1] + " accepts a correct setup and rejects the starting setup", function () {
+        assert(LABS[c[0]].checks[c[1]](labWith(c[0], c[2])).ok, "correct setup rejected");
+        const fresh = LABS[c[0]].init();
+        if (c[0] === "bv-lab") fresh.queries = [];
+        assert(!LABS[c[0]].checks[c[1]](fresh).ok, "starting setup accepted");
+      });
+    });
+
+    document.getElementById("summary").textContent = failed === 0 ? "All " + passed + " tests passed." : failed + " of " + (passed + failed) + " tests FAILED.";
+    document.getElementById("summary").className = failed === 0 ? "pass" : "fail";
+    window.QQ_TEST_RESULT = { passed: passed, failed: failed };
+  })();
+  </script>
+</body>
+</html>
