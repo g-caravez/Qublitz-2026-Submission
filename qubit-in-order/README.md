@@ -1,6 +1,6 @@
 # Qubit in Order: Unlock the Quantum Computer
 
-**Play it:** (https://g-caravez.github.io/Qublitz-2026-Submission/qubit-in-order/)
+**Play it:** https://g-caravez.github.io/Qublitz-2026-Submission/qubit-in-order/
 
 A browser game that teaches six well-known quantum algorithms, from Deutsch to Shor. A quantum computer is locked; each algorithm you learn, test and rebuild installs one of its six modules. Install all six and it powers on.
 
